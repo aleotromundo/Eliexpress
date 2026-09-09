@@ -1,0 +1,7 @@
+{
+  "name": "Configurador de PC Gamer — EliTech",
+  "description": "Configurador interactivo de computadoras gamer basado en lote real de hardware, con asistente IA, verificación de compatibilidad y pedidos personalizados.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
