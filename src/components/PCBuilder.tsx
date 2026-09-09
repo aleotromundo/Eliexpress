@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { 
   Cpu, CircuitBoard, Layers, Monitor, HardDrive, Zap, 
   Box, Fan, Plus, RefreshCw, Trash2, ShieldCheck, AlertTriangle, 
-  Sparkles, ShoppingCart, HelpCircle, Bot, ArrowRight 
+  Sparkles, ShoppingCart, HelpCircle, Bot, ArrowRight, Globe, ExternalLink
 } from 'lucide-react';
 import { ActiveBuild, ComponentCategory, Product, CompatibilityReport } from '../types';
+import { PCPartPickerModal } from './PCPartPickerModal';
 
 interface PCBuilderProps {
   build: ActiveBuild;
@@ -51,6 +52,8 @@ export function PCBuilder({
   onOpenAiModal,
   onGoToPrebuilts
 }: PCBuilderProps) {
+  const [isPcppModalOpen, setIsPcppModalOpen] = useState(false);
+
   // Calculate pricing breakdown
   const selectedItems = [
     build.cpu,
@@ -111,6 +114,15 @@ export function PCBuilder({
           >
             <Sparkles className="w-4 h-4 text-[#F5C518]" />
             <span>Ver Prearmadas</span>
+          </button>
+
+          <button
+            onClick={() => setIsPcppModalOpen(true)}
+            className="px-3.5 py-2 rounded bg-[#15171B] hover:bg-[#24282E] text-[#4FBDB4] hover:text-[#EDEDE4] border border-[#4FBDB4]/40 text-xs font-['JetBrains_Mono'] uppercase tracking-wider flex items-center gap-2 transition-colors"
+            title="Comparar esta combinación en PCPartPicker"
+          >
+            <Globe className="w-4 h-4 text-[#4FBDB4]" />
+            <span>PCPartPicker</span>
           </button>
         </div>
       </div>
@@ -442,11 +454,26 @@ export function PCBuilder({
             <p className="text-[11px] font-['JetBrains_Mono'] text-[#9AA0A6] text-center leading-relaxed">
               No es un cobro automático: genera un pedido formal por WhatsApp con piezas verificadas para coordinar armado y entrega.
             </p>
+
+            <button
+              onClick={() => setIsPcppModalOpen(true)}
+              className="w-full py-2.5 px-3 bg-[#15171B] hover:bg-[#1E2126] border border-[#33373D] hover:border-[#4FBDB4] text-[#4FBDB4] rounded text-xs font-['JetBrains_Mono'] uppercase tracking-wider flex items-center justify-center gap-2 transition-colors"
+            >
+              <Globe className="w-3.5 h-3.5 text-[#4FBDB4]" />
+              <span>Verificar / Exportar a PCPartPicker</span>
+            </button>
           </div>
 
         </div>
 
       </div>
+
+      {/* PCPartPicker Comparison Modal */}
+      <PCPartPickerModal
+        isOpen={isPcppModalOpen}
+        onClose={() => setIsPcppModalOpen(false)}
+        build={build}
+      />
     </div>
   );
 }

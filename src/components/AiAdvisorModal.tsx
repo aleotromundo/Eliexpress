@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { X, Send, Bot, User, Sparkles, ArrowRight, Loader2 } from 'lucide-react';
+import { 
+  X, Send, Bot, User, Sparkles, ArrowRight, Loader2, 
+  CheckCircle2, AlertTriangle, RefreshCw, Key, ChevronDown, ChevronUp, ExternalLink 
+} from 'lucide-react';
 import { ChatMessage, ComponentCategory, ActiveBuild } from '../types';
 import { CATALOG_PRODUCTS } from '../data/catalog';
 
@@ -7,6 +10,15 @@ interface AiAdvisorModalProps {
   currentBuild: ActiveBuild;
   onApplySuggestedBuild: (componentIds: Partial<Record<ComponentCategory, string>>) => void;
   onClose: () => void;
+}
+
+interface AiStatusState {
+  checking: boolean;
+  configured: boolean;
+  status: 'ready' | 'missing_key' | 'error' | 'loading';
+  message: string;
+  model?: string;
+  envVarName?: string;
 }
 
 export function AiAdvisorModal({
@@ -26,6 +38,43 @@ export function AiAdvisorModal({
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  // Live AI Key Health / Diagnostic state
+  const [aiStatus, setAiStatus] = useState<AiStatusState>({
+    checking: true,
+    configured: false,
+    status: 'loading',
+    message: 'Verificando clave GEMINI_API_KEY...'
+  });
+  const [showConfigGuide, setShowConfigGuide] = useState(false);
+
+  async function checkAiHealth() {
+    setAiStatus(prev => ({ ...prev, checking: true }));
+    try {
+      const res = await fetch('/api/ai-status');
+      if (!res.ok) throw new Error('Endpoint no disponible');
+      const data = await res.json();
+      setAiStatus({
+        checking: false,
+        configured: !!data.configured,
+        status: data.status || (data.configured ? 'ready' : 'missing_key'),
+        message: data.message || '',
+        model: data.model,
+        envVarName: data.envVarName || 'GEMINI_API_KEY'
+      });
+    } catch (err: any) {
+      setAiStatus({
+        checking: false,
+        configured: false,
+        status: 'missing_key',
+        message: 'No se pudo contactar el endpoint /api/ai-status. El asesor responderá con su catálogo offline.'
+      });
+    }
+  }
+
+  useEffect(() => {
+    checkAiHealth();
+  }, []);
 
   const quickPrompts = [
     'Tengo $1000 USD y quiero jugar Fortnite y GTA',
@@ -130,6 +179,114 @@ export function AiAdvisorModal({
             <X className="w-5 h-5" />
           </button>
         </div>
+
+        {/* Live GEMINI_API_KEY Diagnostic Bar */}
+        {aiStatus.status === 'ready' && (
+          <div className="px-4 py-2 bg-emerald-950/40 border-b border-emerald-500/30 flex items-center justify-between gap-2 text-xs font-['JetBrains_Mono']">
+            <div className="flex items-center gap-2 text-emerald-400 min-w-0">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+              <span className="truncate">
+                <b>GEMINI_API_KEY Activa:</b> Conectado con Google Gemini ({aiStatus.model || 'gemini-3.8-flash'})
+              </span>
+            </div>
+            <button
+              onClick={checkAiHealth}
+              disabled={aiStatus.checking}
+              className="px-2 py-0.5 rounded bg-emerald-900/40 hover:bg-emerald-800/60 text-emerald-300 text-[11px] flex items-center gap-1 transition-colors flex-shrink-0"
+              title="Volver a verificar conexión"
+            >
+              <RefreshCw className={`w-3 h-3 ${aiStatus.checking ? 'animate-spin' : ''}`} />
+              <span>Verificar</span>
+            </button>
+          </div>
+        )}
+
+        {aiStatus.status === 'missing_key' && (
+          <div className="px-4 py-2 bg-[#1C1E23] border-b border-[#F5C518]/30 text-xs font-['JetBrains_Mono']">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2 text-[#F5C518]">
+                <AlertTriangle className="w-4 h-4 text-[#F5C518] flex-shrink-0" />
+                <span>
+                  <b>Modo Local (Offline):</b> Falta <code className="bg-[#15171B] px-1.5 py-0.5 rounded text-[#EDEDE4] border border-[#33373D]">GEMINI_API_KEY</code> en Vercel / hosting.
+                </span>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <button
+                  onClick={() => setShowConfigGuide(!showConfigGuide)}
+                  className="text-[11px] underline text-[#4FBDB4] hover:text-[#EDEDE4] flex items-center gap-0.5 cursor-pointer"
+                >
+                  <span>{showConfigGuide ? 'Ocultar pasos Vercel' : '¿Cómo activarla en Vercel?'}</span>
+                  {showConfigGuide ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                </button>
+                <button
+                  onClick={checkAiHealth}
+                  disabled={aiStatus.checking}
+                  className="px-2.5 py-1 bg-[#2A2E35] hover:bg-[#33373D] text-[#EDEDE4] rounded text-[11px] flex items-center gap-1 transition-colors"
+                  title="Comprobar si ya la agregaste a las variables de entorno"
+                >
+                  <RefreshCw className={`w-3 h-3 ${aiStatus.checking ? 'animate-spin' : ''}`} />
+                  <span>Chequear ahora</span>
+                </button>
+              </div>
+            </div>
+
+            {showConfigGuide && (
+              <div className="mt-2.5 p-3 rounded bg-[#15171B] border border-[#33373D] text-[11px] font-['Inter'] text-[#9AA0A6] space-y-2 animate-fade-in">
+                <div className="flex items-center justify-between text-[#EDEDE4] font-bold font-['JetBrains_Mono']">
+                  <span>Pasos para poner la API en Vercel (Gratuito):</span>
+                  <a
+                    href="https://aistudio.google.com/app/apikey"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[#4FBDB4] hover:underline"
+                  >
+                    <span>Abrir Google AI Studio</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+                <ol className="list-decimal pl-4 space-y-1">
+                  <li>
+                    Generá tu clave gratuita en <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-[#4FBDB4] underline font-['JetBrains_Mono']">Google AI Studio</a> (comienza con <code>AIzaSy...</code>).
+                  </li>
+                  <li>
+                    En tu panel de <strong>Vercel</strong>, seleccioná tu proyecto y entrá a: <strong>Settings &gt; Environment Variables</strong>.
+                  </li>
+                  <li>
+                    En <strong>Key</strong> escribí exactamente: <strong className="text-[#F5C518] font-mono">GEMINI_API_KEY</strong>
+                  </li>
+                  <li>
+                    En <strong>Value</strong> pegá tu clave de Google y hacé clic en <strong>Save</strong>.
+                  </li>
+                  <li>
+                    Hacé un <strong>Redeploy</strong> (o nuevo deploy) en Vercel para que tome los cambios. Al abrir este chat, se pondrá en verde automáticamente.
+                  </li>
+                </ol>
+                <p className="text-[10px] text-[#4FBDB4]">
+                  💡 <em>Mientras tanto, el chat funciona igual de manera inteligente con las reglas y productos de tu lote en Montevideo.</em>
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {aiStatus.status === 'error' && (
+          <div className="px-4 py-2 bg-red-950/30 border-b border-red-500/30 flex items-center justify-between gap-2 text-xs font-['JetBrains_Mono']">
+            <div className="flex items-center gap-2 text-red-400 min-w-0">
+              <AlertTriangle className="w-3.5 h-3.5 text-red-400 flex-shrink-0" />
+              <span className="truncate">
+                <b>Error en GEMINI_API_KEY:</b> {aiStatus.message}
+              </span>
+            </div>
+            <button
+              onClick={checkAiHealth}
+              disabled={aiStatus.checking}
+              className="px-2 py-0.5 rounded bg-red-900/40 hover:bg-red-800/60 text-red-200 text-[11px] flex items-center gap-1 transition-colors flex-shrink-0"
+            >
+              <RefreshCw className={`w-3 h-3 ${aiStatus.checking ? 'animate-spin' : ''}`} />
+              <span>Reintentar</span>
+            </button>
+          </div>
+        )}
 
         {/* Message Thread */}
         <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-[#15171B]/60">

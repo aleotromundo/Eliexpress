@@ -125,12 +125,8 @@ export function Header({
 
           <button
             id="tab-ai-btn"
-            onClick={() => setActiveTab('ai')}
-            className={`px-3.5 py-2 rounded font-['JetBrains_Mono'] text-xs uppercase tracking-wider flex items-center gap-2 transition-all whitespace-nowrap ${
-              activeTab === 'ai'
-                ? 'bg-[#4FBDB4] text-[#15171B] font-bold shadow-md shadow-[#4FBDB4]/20'
-                : 'text-[#4FBDB4] hover:bg-[#4FBDB4]/15 border border-[#4FBDB4]/30'
-            }`}
+            onClick={onOpenAiModal}
+            className="px-3.5 py-2 rounded font-['JetBrains_Mono'] text-xs uppercase tracking-wider flex items-center gap-2 transition-all whitespace-nowrap text-[#4FBDB4] hover:bg-[#4FBDB4]/15 border border-[#4FBDB4]/30 hover:border-[#4FBDB4] shadow-sm"
           >
             <Bot className="w-4 h-4" />
             Asistente IA

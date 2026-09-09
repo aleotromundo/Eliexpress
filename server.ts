@@ -73,6 +73,53 @@ app.get('/api/health', (req: Request, res: Response) => {
   });
 });
 
+// AI Diagnostic and Key Verification Endpoint
+app.get('/api/ai-status', async (req: Request, res: Response) => {
+  const hasKey = !!process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim().length > 0;
+  
+  if (!hasKey) {
+    res.json({
+      configured: false,
+      status: 'missing_key',
+      envVarName: 'GEMINI_API_KEY',
+      message: 'No se detectó la variable GEMINI_API_KEY en las variables de entorno. El chat funciona en modo de contingencia local (con respuestas inteligentes del catálogo). Para activar Google Gemini en producción/Vercel, agrega GEMINI_API_KEY en Environment Variables.',
+      timestamp: new Date().toISOString()
+    });
+    return;
+  }
+
+  try {
+    const ai = getGeminiClient();
+    if (!ai) throw new Error('No se pudo inicializar el cliente GoogleGenAI');
+
+    // Quick verification ping to Google Gemini
+    const testResponse = await ai.models.generateContent({
+      model: 'gemini-3.8-flash',
+      contents: 'Responde únicamente la palabra "OK".'
+    });
+
+    res.json({
+      configured: true,
+      status: 'ready',
+      model: 'gemini-3.8-flash',
+      envVarName: 'GEMINI_API_KEY',
+      message: 'Variable GEMINI_API_KEY configurada y verificada exitosamente con Google Gemini.',
+      pingReply: testResponse.text?.trim().slice(0, 20) || 'OK',
+      timestamp: new Date().toISOString()
+    });
+  } catch (err: any) {
+    console.error('Error verifying Gemini API key:', err);
+    res.json({
+      configured: true,
+      status: 'error',
+      envVarName: 'GEMINI_API_KEY',
+      message: `Se detectó GEMINI_API_KEY pero Google devolvió un error: ${err.message || 'Clave inválida o sin cuota'}. Verificá que la clave en Google AI Studio sea correcta.`,
+      error: err.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
 // AI Chat Endpoint for "Módulo E — Asistente / Encontrá tu PC"
 app.post('/api/chat', async (req: Request, res: Response) => {
   try {
