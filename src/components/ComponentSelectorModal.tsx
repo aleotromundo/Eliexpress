@@ -105,7 +105,7 @@ export function ComponentSelectorModal({
   const currentCategoryLabel = CATEGORY_TABS.find(t => t.id === selectedCategory)?.label || initialLabel;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-sm overflow-y-auto">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-sm overflow-y-auto">
       <div 
         className="relative w-full max-w-4xl bg-[#1E2126] border border-[#33373D] rounded-lg shadow-2xl overflow-hidden my-6 flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
@@ -212,7 +212,7 @@ export function ComponentSelectorModal({
                   : 'bg-[#1E2126] text-emerald-400/80 hover:text-emerald-300'
               }`}
             >
-              <span>🟢 En Stock Montevideo</span>
+              <span>🟢 En Stock Inmediato</span>
               <span className="text-[10px]">({categoryProducts.filter(p => p.origen === 'CATALOGO').length})</span>
             </button>
             <button
@@ -286,7 +286,7 @@ export function ComponentSelectorModal({
                             ? 'bg-blue-500/15 text-blue-400 border-blue-500/30'
                             : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
                         }`}>
-                          {isSpecial ? '🔵 Recomendación Gamer · A Conseguir' : '🟢 Lote en Stock (Montevideo)'}
+                          {isSpecial ? '🔵 Recomendación Gamer · A Conseguir' : '🟢 Lote en Stock Inmediato'}
                         </span>
 
                         <span className="text-[10px] font-['JetBrains_Mono'] text-[#9AA0A6] uppercase">
@@ -375,7 +375,7 @@ export function ComponentSelectorModal({
         {/* Footer info banner */}
         <div className="p-3 bg-[#15171B] border-t border-[#33373D] flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-['JetBrains_Mono'] text-[#9AA0A6]">
           <span>
-            Hardware real testeado físicamente en Montevideo · EliTech Lote 01-A
+            Hardware real testeado físicamente · EliTech Lote 01-A
           </span>
           <button
             onClick={() => {

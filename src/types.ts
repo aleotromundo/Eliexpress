@@ -80,6 +80,7 @@ export interface ActiveBuild {
   cooling: Product | null;
   monitor: Product | null;
   accessories: Product[];
+  quantities?: Record<string, number>;
 }
 
 export interface CompatibilityIssue {

@@ -89,11 +89,25 @@ export default function App() {
     });
   }
 
-  function handleRemoveComponent(category: ComponentCategory) {
-    setBuild(prev => ({
-      ...prev,
-      [category]: null
-    }));
+  function handleRemoveComponent(category: ComponentCategory, accessoryIndex?: number) {
+    setBuild(prev => {
+      if (category === 'accessories') {
+        if (typeof accessoryIndex === 'number') {
+          return {
+            ...prev,
+            accessories: prev.accessories.filter((_, idx) => idx !== accessoryIndex)
+          };
+        }
+        return {
+          ...prev,
+          accessories: []
+        };
+      }
+      return {
+        ...prev,
+        [category]: null
+      };
+    });
   }
 
   function handleResetBuild() {
@@ -237,7 +251,7 @@ export default function App() {
         {/* Footer */}
         <footer className="border-t border-[#33373D] bg-[#15171B]/90 mt-12 py-8 px-4 sm:px-6 text-center text-xs font-['JetBrains_Mono'] text-[#9AA0A6] space-y-2">
           <div className="flex items-center justify-center gap-3 flex-wrap">
-            <span className="text-[#EDEDE4] font-bold">EliTech Montevideo</span>
+            <span className="text-[#EDEDE4] font-bold">EliTech</span>
             <span>·</span>
             <span>Hardware físico verificado Lote 01-A</span>
             <span>·</span>
@@ -250,6 +264,31 @@ export default function App() {
       </div>
 
       {/* MODALS */}
+
+      {/* Order Summary / WhatsApp Modal */}
+      {isOrderModalOpen && (
+        <OrderSummaryModal
+          build={build}
+          compatReport={compatReport}
+          onClose={() => setIsOrderModalOpen(false)}
+          onRemoveComponent={handleRemoveComponent}
+          onChangeComponent={(category, label) => {
+            setSelectorModal({
+              isOpen: true,
+              category,
+              label
+            });
+          }}
+          onOpenAddPiece={() => {
+            setSelectorModal({
+              isOpen: true,
+              category: 'all',
+              label: 'Todos los Componentes'
+            });
+          }}
+          onResetBuild={handleResetBuild}
+        />
+      )}
 
       {/* Component Selector Modal */}
       {selectorModal.isOpen && (
@@ -269,15 +308,6 @@ export default function App() {
           initialCategory={specialRequestModal.category}
           onAddSpecialProduct={handleSelectProduct}
           onClose={() => setSpecialRequestModal(prev => ({ ...prev, isOpen: false }))}
-        />
-      )}
-
-      {/* Order Summary / WhatsApp Modal */}
-      {isOrderModalOpen && (
-        <OrderSummaryModal
-          build={build}
-          compatReport={compatReport}
-          onClose={() => setIsOrderModalOpen(false)}
         />
       )}
 

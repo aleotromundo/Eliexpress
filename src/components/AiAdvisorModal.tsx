@@ -30,7 +30,7 @@ export function AiAdvisorModal({
     {
       id: 'welcome',
       sender: 'assistant',
-      text: '¡Buenas! Soy el asesor de hardware de **EliTech**. Conozco cada componente físico de nuestro lote en Montevideo y las piezas complementarias disponibles.\n\nContame: ¿qué presupuesto tenés en mente, o qué juegos querés jugar y en qué resolución (1080p, 1440p o 4K)? Te armo la mejor propuesta cuidando cada peso.',
+      text: '¡Buenas! Soy el asesor de hardware de **EliTech**. Conozco cada componente físico de nuestro lote en stock y las piezas complementarias disponibles.\n\nContame: ¿qué presupuesto tenés en mente, o qué juegos querés jugar y en qué resolución (1080p, 1440p o 4K)? Te armo la mejor propuesta cuidando cada peso.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -262,7 +262,7 @@ export function AiAdvisorModal({
                   </li>
                 </ol>
                 <p className="text-[10px] text-[#4FBDB4]">
-                  💡 <em>Mientras tanto, el chat funciona igual de manera inteligente con las reglas y productos de tu lote en Montevideo.</em>
+                  💡 <em>Mientras tanto, el chat funciona igual de manera inteligente con las reglas y productos de tu lote en stock.</em>
                 </p>
               </div>
             )}

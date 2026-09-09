@@ -18,21 +18,31 @@ export function Header({
   onOpenOrderModal,
   onOpenAiModal
 }: HeaderProps) {
-  // Calculate total price and selected items count
-  const allSelected = [
-    build.cpu,
-    build.motherboard,
-    build.ram,
-    build.gpu,
-    build.storage,
-    build.psu,
-    build.case,
-    build.cooling,
-    build.monitor,
-    ...build.accessories
-  ].filter(Boolean);
+  // Calculate total price and selected items count with quantities
+  const rawSlots = [
+    { key: 'cpu', item: build.cpu },
+    { key: 'motherboard', item: build.motherboard },
+    { key: 'ram', item: build.ram },
+    { key: 'gpu', item: build.gpu },
+    { key: 'storage', item: build.storage },
+    { key: 'psu', item: build.psu },
+    { key: 'case', item: build.case },
+    { key: 'cooling', item: build.cooling },
+    { key: 'monitor', item: build.monitor },
+    ...build.accessories.map((acc, idx) => ({ key: `acc-${idx}`, item: acc }))
+  ];
 
-  const totalPrice = allSelected.reduce((sum, item) => sum + (item?.precio || 0), 0);
+  const selectedSlots = rawSlots.filter(s => s.item !== null);
+
+  const totalPrice = selectedSlots.reduce((sum, s) => {
+    const qty = (build.quantities && build.quantities[s.key]) || 1;
+    return sum + (s.item!.precio * qty);
+  }, 0);
+
+  const totalUnits = selectedSlots.reduce((sum, s) => {
+    return sum + ((build.quantities && build.quantities[s.key]) || 1);
+  }, 0);
+
   const coreItemCount = [
     build.cpu,
     build.motherboard,
@@ -77,7 +87,7 @@ export function Header({
           <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-full border border-[#C9A227]/30 bg-[#1E2126]">
             <span className="w-2.5 h-2.5 rounded-full bg-[#F5C518] animate-pulse" />
             <span className="text-xs font-['JetBrains_Mono'] text-[#9AA0A6]">
-              Montevideo · Hardware físico testeado
+              Hardware físico testeado y garantizado
             </span>
           </div>
         </div>
@@ -146,7 +156,8 @@ export function Header({
                   compatReport.status === 'error' ? 'bg-rose-500' :
                   compatReport.status === 'warning' ? 'bg-amber-400' : 'bg-emerald-400'
                 }`} />
-                {coreItemCount} piezas ({compatReport.tierLabel})
+                {selectedSlots.length} {selectedSlots.length === 1 ? 'pieza' : 'piezas'}
+                {totalUnits > selectedSlots.length ? ` (${totalUnits} un.)` : ''} · {compatReport.tierLabel}
               </span>
               <span className="font-['JetBrains_Mono'] font-bold text-sm text-[#F5C518]">
                 US$ {totalPrice}

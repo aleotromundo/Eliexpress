@@ -32,7 +32,7 @@ function getGeminiClient(): GoogleGenAI | null {
 
 // System catalog context for the AI
 const CATALOG_SUMMARY = `
-ESTE ES EL LOTE REAL Y ACTUAL DE HARDWARE DISPONIBLE EN ELITECH (URUGUAY / MONTEVIDEO):
+ESTE ES EL LOTE REAL Y ACTUAL DE HARDWARE DISPONIBLE EN ELITECH:
 - PLACAS DE VIDEO (GPU):
   * XFX Radeon RX 9070 XT Quicksilver 16GB GDDR6 (RDNA 4, PCIe 5.0, 3 fans AXIAL, PSU 800W+): $950 USD (Gama Extrema 4K)
   * Gigabyte RX 7800 XT Gaming OC 16GB GDDR6 (RDNA 3, PCIe 4.0, WINDFORCE 3 fans, PSU 750W+): $799 USD (Gama Media/Alta 1440p)
@@ -220,7 +220,7 @@ Si querés acompañarla con el rey del gaming (Ryzen 7 7800X3D), te lo cargamos 
       } else {
         replyText = `¡Hola! Soy el asesor de hardware de **EliTech**. Mi trabajo es armarte la PC justa para tu necesidad y presupuesto.
 
-Contamos con un lote físico verificado en Montevideo que incluye gráficas de última generación (Radeon RX 9070 XT 16GB, RX 7800 XT 16GB, RTX 5070 OC 12GB), combos Ryzen de 8 núcleos, y memorias DDR5 de hasta 64GB. Si te falta alguna pieza específica, la tramitamos como **[PEDIDO ESPECIAL]**.
+Contamos con un lote físico verificado en stock que incluye gráficas de última generación (Radeon RX 9070 XT 16GB, RX 7800 XT 16GB, RTX 5070 OC 12GB), combos Ryzen de 8 núcleos, y memorias DDR5 de hasta 64GB. Si te falta alguna pieza específica, la tramitamos como **[PEDIDO ESPECIAL]**.
 
 Contame:
 1. ¿Qué juegos o programas querés correr principalmente? (Ej. Fortnite, GTA, CS2, Cyberpunk, Premiere, etc.)
@@ -236,7 +236,7 @@ Contame:
     }
 
     // With Gemini API key available
-    const systemPrompt = `Eres el asesor técnico de hardware y armador oficial de "EliTech" (negocio de armado y venta de computadoras gamer en Montevideo, Uruguay).
+    const systemPrompt = `Eres el asesor técnico de hardware y armador oficial de "EliTech" (negocio especializado en armado y venta de computadoras gamer).
 Tu personalidad es cercana, técnica, honesta ("Hardware real, cero relato de vendedor"), humana y profesional.
 Habla en español rioplatense sutil o neutro ("Mirá", "Te recomiendo", "Fijate", "Podemos armarla").
 

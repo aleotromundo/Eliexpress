@@ -59,7 +59,7 @@ export function CatalogSection({
             Catálogo & Guía de Componentes
           </h2>
           <p className="text-xs font-['Inter'] text-[#9AA0A6] max-w-2xl mt-1">
-            Combina piezas que tenemos <b>en mano en Montevideo</b> (Lote 01-A) con <b>recomendaciones de la comunidad gamer internacional</b> listas para pedir o traer de importación.
+            Combina piezas que tenemos <b>en mano en stock inmediato</b> (Lote 01-A) con <b>recomendaciones de la comunidad gamer internacional</b> listas para pedir o traer de importación.
           </p>
         </div>
 
@@ -157,7 +157,7 @@ export function CatalogSection({
                 : 'bg-[#1E2126] text-emerald-400 hover:text-emerald-300'
             }`}
           >
-            <span>🟢 Stock Físico Montevideo</span>
+            <span>🟢 Stock Físico Inmediato</span>
             <span className="text-[10px]">({stockCount})</span>
           </button>
           <button
@@ -366,7 +366,7 @@ export function CatalogSection({
                     ? 'bg-blue-500/15 text-blue-400 border-blue-500/30'
                     : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
                 }`}>
-                  {zoomProduct.origen === 'PEDIDO_ESPECIAL' ? '🔵 Recomendación Gamer · A Conseguir' : '🟢 Lote Físico en Stock (Montevideo)'}
+                  {zoomProduct.origen === 'PEDIDO_ESPECIAL' ? '🔵 Recomendación Gamer · A Conseguir' : '🟢 Lote Físico en Stock'}
                 </span>
                 <span className="text-xs font-['JetBrains_Mono'] text-[#9AA0A6]">
                   US$ {zoomProduct.precio}
@@ -378,7 +378,7 @@ export function CatalogSection({
               <p className="text-xs font-['JetBrains_Mono'] text-[#9AA0A6] mt-1">
                 {zoomProduct.origen === 'PEDIDO_ESPECIAL'
                   ? 'Pieza estándar de la comunidad gamer verificable en PCPartPicker · Gestionable a pedido'
-                  : 'Hardware verificado físicamente en Montevideo · EliTech Lote 01-A'}
+                  : 'Hardware verificado físicamente · EliTech Lote 01-A'}
               </p>
             </div>
           </div>

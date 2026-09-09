@@ -98,7 +98,7 @@ export function SpecialRequestModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
       <div 
         className="relative w-full max-w-2xl bg-[#1E2126] border border-[#33373D] rounded-lg shadow-2xl overflow-hidden my-8"
         onClick={(e) => e.stopPropagation()}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { 
   Cpu, CircuitBoard, Layers, Monitor, HardDrive, Zap, 
-  Box, Fan, Plus, RefreshCw, Trash2, ShieldCheck, AlertTriangle, 
+  Box, Fan, Plus, Minus, RefreshCw, Trash2, ShieldCheck, AlertTriangle, 
   Sparkles, ShoppingCart, HelpCircle, Bot, ArrowRight, Globe, ExternalLink
 } from 'lucide-react';
 import { ActiveBuild, ComponentCategory, Product, CompatibilityReport } from '../types';
@@ -17,6 +17,7 @@ interface PCBuilderProps {
   onOpenOrderModal: () => void;
   onOpenAiModal: () => void;
   onGoToPrebuilts: () => void;
+  onUpdateQuantity?: (key: string, qty: number) => void;
 }
 
 type BuilderSlotKey = Exclude<ComponentCategory, 'accessories'>;
@@ -50,33 +51,44 @@ export function PCBuilder({
   onResetBuild,
   onOpenOrderModal,
   onOpenAiModal,
-  onGoToPrebuilts
+  onGoToPrebuilts,
+  onUpdateQuantity
 }: PCBuilderProps) {
   const [isPcppModalOpen, setIsPcppModalOpen] = useState(false);
 
-  // Calculate pricing breakdown
-  const selectedItems = [
-    build.cpu,
-    build.motherboard,
-    build.ram,
-    build.gpu,
-    build.storage,
-    build.psu,
-    build.case,
-    build.cooling,
-    build.monitor,
-    ...build.accessories
-  ].filter(Boolean) as Product[];
+  // Calculate pricing breakdown with quantities
+  const rawSlots = [
+    { key: 'cpu', item: build.cpu },
+    { key: 'motherboard', item: build.motherboard },
+    { key: 'ram', item: build.ram },
+    { key: 'gpu', item: build.gpu },
+    { key: 'storage', item: build.storage },
+    { key: 'psu', item: build.psu },
+    { key: 'case', item: build.case },
+    { key: 'cooling', item: build.cooling },
+    { key: 'monitor', item: build.monitor },
+    ...build.accessories.map((acc, idx) => ({ key: `acc-${idx}`, item: acc }))
+  ];
 
-  const totalStock = selectedItems
-    .filter(i => i.origen === 'CATALOGO')
-    .reduce((sum, i) => sum + i.precio, 0);
+  const selectedSlots = rawSlots.filter((s): s is { key: string; item: Product } => s.item !== null);
 
-  const totalSpecial = selectedItems
-    .filter(i => i.origen === 'PEDIDO_ESPECIAL')
-    .reduce((sum, i) => sum + i.precio, 0);
+  const totalStock = selectedSlots
+    .filter(s => s.item.origen === 'CATALOGO')
+    .reduce((sum, s) => {
+      const qty = (build.quantities && build.quantities[s.key]) || 1;
+      return sum + (s.item.precio * qty);
+    }, 0);
+
+  const totalSpecial = selectedSlots
+    .filter(s => s.item.origen === 'PEDIDO_ESPECIAL')
+    .reduce((sum, s) => {
+      const qty = (build.quantities && build.quantities[s.key]) || 1;
+      return sum + (s.item.precio * qty);
+    }, 0);
 
   const totalGeneral = totalStock + totalSpecial;
+  const totalUnits = selectedSlots.reduce((sum, s) => sum + ((build.quantities && build.quantities[s.key]) || 1), 0);
+  const selectedItems = selectedSlots.map(s => s.item);
 
   return (
     <div className="space-y-8">
@@ -95,7 +107,7 @@ export function PCBuilder({
             Configurador de Hardware
           </h2>
           <p className="text-xs font-['Inter'] text-[#9AA0A6] max-w-2xl mt-1">
-            Armá tu equipo combinando piezas físicas disponibles en nuestro lote de Montevideo y pedidos especiales que conseguimos para vos. El sistema comprueba compatibilidad y potencia en tiempo real.
+            Armá tu equipo combinando piezas físicas disponibles en nuestro lote en stock y pedidos especiales que conseguimos para vos. El sistema comprueba compatibilidad y potencia en tiempo real.
           </p>
         </div>
 
@@ -161,6 +173,8 @@ export function PCBuilder({
             const currentItem = build[slot.key];
             const Icon = slot.icon;
             const isSpecial = currentItem?.origen === 'PEDIDO_ESPECIAL';
+            const qty = (build.quantities && build.quantities[slot.key]) || 1;
+            const itemTotal = currentItem ? currentItem.precio * qty : 0;
 
             return (
               <div 
@@ -198,6 +212,12 @@ export function PCBuilder({
                             {isSpecial ? '🔵 PEDIDO ESPECIAL — A CONSEGUIR' : '🟢 LOTE EN STOCK'}
                           </span>
                         )}
+
+                        {currentItem && qty > 1 && (
+                          <span className="text-[10px] font-['JetBrains_Mono'] px-2 py-0.5 rounded bg-[#F5C518]/15 text-[#F5C518] border border-[#F5C518]/40 font-bold">
+                            x{qty} UNIDADES
+                          </span>
+                        )}
                       </div>
 
                       {currentItem ? (
@@ -220,14 +240,53 @@ export function PCBuilder({
                   {/* Price & Action Buttons */}
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#33373D]/60 flex-shrink-0">
                     {currentItem ? (
-                      <div className="flex items-center sm:items-end justify-between sm:justify-end w-full sm:w-auto gap-4">
-                        <div className="sm:text-right">
+                      <div className="flex items-center sm:items-end justify-between sm:justify-end w-full sm:w-auto gap-3 sm:gap-4">
+                        
+                        {/* Quantity Stepper */}
+                        {onUpdateQuantity && (
+                          <div className="flex items-center bg-[#15171B] border border-[#33373D] rounded overflow-hidden shadow-inner">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (qty > 1) {
+                                  onUpdateQuantity(slot.key, qty - 1);
+                                } else {
+                                  onRemoveComponent(slot.key);
+                                }
+                              }}
+                              className="w-7 h-7 flex items-center justify-center text-[#9AA0A6] hover:text-[#EDEDE4] hover:bg-[#25282F] transition-colors"
+                              title={qty > 1 ? "Disminuir cantidad" : "Quitar de la PC"}
+                            >
+                              <Minus className="w-3 h-3" />
+                            </button>
+
+                            <span className="w-7 text-center font-['JetBrains_Mono'] font-bold text-xs text-[#EDEDE4] select-none">
+                              {qty}
+                            </span>
+
+                            <button
+                              type="button"
+                              onClick={() => onUpdateQuantity(slot.key, qty + 1)}
+                              className="w-7 h-7 flex items-center justify-center text-[#9AA0A6] hover:text-[#F5C518] hover:bg-[#25282F] transition-colors"
+                              title="Pedir más de una unidad de esta pieza"
+                            >
+                              <Plus className="w-3 h-3" />
+                            </button>
+                          </div>
+                        )}
+
+                        <div className="sm:text-right min-w-[75px]">
                           <span className="text-[10px] font-['JetBrains_Mono'] text-[#9AA0A6] block uppercase">
-                            Precio
+                            {qty > 1 ? `Precio (x${qty})` : 'Precio'}
                           </span>
                           <span className="text-lg font-['JetBrains_Mono'] font-bold text-[#F5C518]">
-                            US$ {currentItem.precio}
+                            US$ {itemTotal}
                           </span>
+                          {qty > 1 && (
+                            <span className="text-[10px] font-['JetBrains_Mono'] text-[#9AA0A6] block">
+                              US$ {currentItem.precio} c/u
+                            </span>
+                          )}
                         </div>
 
                         <div className="flex items-center gap-1.5">
@@ -238,7 +297,7 @@ export function PCBuilder({
                             title={`Cambiar o elegir otro ${slot.label}`}
                           >
                             <RefreshCw className="w-3.5 h-3.5" />
-                            <span>Cambiar pieza</span>
+                            <span className="hidden sm:inline">Cambiar</span>
                           </button>
 
                           <button
@@ -284,6 +343,97 @@ export function PCBuilder({
               </div>
             );
           })}
+
+          {/* Additional Accessories Section if present */}
+          {build.accessories.length > 0 && (
+            <div className="space-y-3 pt-2">
+              <h4 className="text-xs font-['JetBrains_Mono'] text-[#4FBDB4] uppercase tracking-wider font-bold">
+                Accesorios Adicionales ({build.accessories.length})
+              </h4>
+              {build.accessories.map((acc, idx) => {
+                const accKey = `acc-${idx}`;
+                const qty = (build.quantities && build.quantities[accKey]) || 1;
+                const itemTotal = acc.precio * qty;
+                return (
+                  <div
+                    key={accKey}
+                    className="p-4 rounded-lg border border-[#33373D] bg-[#1E2126] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                  >
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-['JetBrains_Mono'] text-[#9AA0A6] uppercase font-bold">
+                          Accesorio #{idx + 1}
+                        </span>
+                        {qty > 1 && (
+                          <span className="text-[9px] font-['JetBrains_Mono'] px-1.5 py-0.5 rounded bg-[#F5C518]/15 text-[#F5C518] border border-[#F5C518]/40 uppercase font-bold">
+                            x{qty} UNIDADES
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="text-base font-['Rajdhani'] font-bold text-[#EDEDE4] leading-tight">
+                        {acc.nombre}
+                      </h4>
+                    </div>
+
+                    <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4">
+                      {/* Quantity Stepper */}
+                      {onUpdateQuantity && (
+                        <div className="flex items-center bg-[#15171B] border border-[#33373D] rounded overflow-hidden shadow-inner">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (qty > 1) {
+                                onUpdateQuantity(accKey, qty - 1);
+                              } else {
+                                onRemoveComponent('accessories');
+                              }
+                            }}
+                            className="w-7 h-7 flex items-center justify-center text-[#9AA0A6] hover:text-[#EDEDE4] hover:bg-[#25282F] transition-colors"
+                            title="Reducir cantidad"
+                          >
+                            <Minus className="w-3 h-3" />
+                          </button>
+                          <span className="w-7 text-center font-['JetBrains_Mono'] font-bold text-xs text-[#EDEDE4] select-none">
+                            {qty}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => onUpdateQuantity(accKey, qty + 1)}
+                            className="w-7 h-7 flex items-center justify-center text-[#9AA0A6] hover:text-[#F5C518] hover:bg-[#25282F] transition-colors"
+                            title="Aumentar cantidad"
+                          >
+                            <Plus className="w-3 h-3" />
+                          </button>
+                        </div>
+                      )}
+
+                      <div className="sm:text-right min-w-[70px]">
+                        <span className="text-[10px] font-['JetBrains_Mono'] text-[#9AA0A6] block uppercase">
+                          {qty > 1 ? `Precio (x${qty})` : 'Precio'}
+                        </span>
+                        <span className="text-lg font-['JetBrains_Mono'] font-bold text-[#F5C518]">
+                          US$ {itemTotal}
+                        </span>
+                        {qty > 1 && (
+                          <span className="text-[10px] font-['JetBrains_Mono'] text-[#9AA0A6] block">
+                            US$ {acc.precio} c/u
+                          </span>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() => onRemoveComponent('accessories')}
+                        className="p-2 rounded text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-rose-500/30 text-xs font-['JetBrains_Mono'] transition-colors"
+                        title="Quitar accesorio"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           {/* Reset Build Option */}
           <div className="pt-2 flex justify-end">
@@ -433,6 +583,13 @@ export function PCBuilder({
           {/* Budget & Order CTA (MÓDULO 5) */}
           <div className="p-5 rounded-lg bg-gradient-to-b from-[#1E2126] to-[#15171B] border border-[#F5C518]/30 space-y-4 shadow-xl">
             <div className="space-y-1.5">
+              <div className="flex justify-between text-xs font-['JetBrains_Mono'] text-[#9AA0A6]">
+                <span>Unidades seleccionadas:</span>
+                <span className="text-[#EDEDE4] font-bold">
+                  {totalUnits} {totalUnits === 1 ? 'unidad' : 'unidades'} ({selectedSlots.length} piezas)
+                </span>
+              </div>
+
               <div className="flex justify-between text-xs font-['JetBrains_Mono'] text-[#9AA0A6]">
                 <span>Piezas Lote en Stock:</span>
                 <span className="text-[#EDEDE4] font-bold">US$ {totalStock}</span>
