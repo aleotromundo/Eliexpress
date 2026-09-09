@@ -91,6 +91,14 @@ export function ComponentSelectorModal({
       }
     }
 
+    if (prod.categoria === 'psu' && currentBuild.gpu) {
+      const psuWatts = prod.compatibilidad.tdp || 650;
+      const recWatts = currentBuild.gpu.compatibilidad.recommendedPsuWatts || 600;
+      if (psuWatts < recWatts - 50) {
+        return { isCompatible: false, reason: `Ajustada: Tu placa (${currentBuild.gpu.nombre}) recomienda ${recWatts}W` };
+      }
+    }
+
     return { isCompatible: true };
   }
 

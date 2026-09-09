@@ -59,7 +59,14 @@ ESTE ES EL LOTE REAL Y ACTUAL DE HARDWARE DISPONIBLE EN ELITECH (URUGUAY / MONTE
   * Gabinete Kolink Void RGB (Vidrio templado, espejo infinito): $68 USD
   * Gabinete DeepCool CC560 V2 Airflow Mesh (4x Fans incluidos): $85 USD
   * Fuente Gigabyte P650B 650W 80+ Bronze: $75 USD
-  * Fuente Corsair RM850e 850W 80+ Gold ATX 3.0: $149 USD
+  * Fuente Gigabyte UD750GM 750W 80+ Gold Modular: $95 USD (Ideal para RX 7800 XT)
+  * Fuente MSI MAG A750GL 750W 80+ Gold ATX 3.0: $105 USD
+  * Fuente Corsair RM750e 750W 80+ Gold ATX 3.0: $109 USD
+  * Fuente EVGA 750 BP 750W 80+ Bronze: $79 USD (Económica 750W)
+  * Fuente Seasonic Focus GX-750 750W 80+ Gold: $119 USD (Tier A indiscutida)
+  * Fuente Thermaltake Toughpower GF1 850W 80+ Gold: $115 USD
+  * Fuente Corsair RM850e 850W 80+ Gold ATX 3.0: $149 USD (Recomendada para RX 9070 XT)
+  * Fuente Corsair RM1000e 1000W 80+ Gold ATX 3.0: $179 USD (Gama Extrema)
   * SSD Kingston NV2 1TB M.2 PCIe 4.0 NVMe: $75 USD
   * SSD Kingston KC3000 2TB PCIe 4.0 (7000 MB/s): $165 USD
 `;

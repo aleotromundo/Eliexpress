@@ -444,6 +444,57 @@ export const CATALOG_PRODUCTS: Product[] = [
     observaciones: 'Ideal para configuraciones con RTX 5070 o RX 7600.'
   },
   {
+    id: 'psu-gigabyte-ud750gm-gold',
+    categoria: 'psu',
+    marca: 'Gigabyte',
+    modelo: 'UD750GM 750W 80 Plus Gold Modular',
+    nombre: 'Gigabyte UD750GM 750W 80+ Gold Modular',
+    precio: 95,
+    moneda: 'USD',
+    imagen: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=800&q=80',
+    stock: 2,
+    especificaciones: [
+      'Potencia continua real de 750W con certificación 80 PLUS Gold',
+      'Ultra Durable: Condensadores 100% japoneses principales',
+      'Ventilador hidráulico de 120mm inteligente (parada silenciosa)',
+      'Diseño totalmente modular para mantener el gabinete despejado',
+      'Protecciones completas OVP/OPP/SCP/UVP/OCP/OTP'
+    ],
+    compatibilidad: {
+      tdp: 750,
+      formFactor: 'ATX'
+    },
+    origen: 'CATALOGO',
+    estado: 'DISPONIBLE',
+    enlaceOficial: 'https://www.gigabyte.com/es/Power-Supply/GP-UD750GM',
+    observaciones: 'Stock disponible en taller. Pareja perfecta y recomendada para la Gigabyte RX 7800 XT.'
+  },
+  {
+    id: 'psu-msi-mag-a750gl-gold',
+    categoria: 'psu',
+    marca: 'MSI',
+    modelo: 'MAG A750GL PCIE5 750W 80+ Gold Modular ATX 3.0',
+    nombre: 'MSI MAG A750GL PCIE5 750W 80+ Gold Modular (ATX 3.0)',
+    precio: 105,
+    moneda: 'USD',
+    imagen: 'https://images.unsplash.com/photo-1587202372616-b43abea06c2a?auto=format&fit=crop&w=800&q=80',
+    stock: 2,
+    especificaciones: [
+      'Estándar ATX 3.0 y soporte nativo PCIe 5.0 con conector 12VHPWR',
+      'Eficiencia 80 PLUS Gold certificada',
+      'Diseño compacto de 140mm de profundidad (entra en cualquier gabinete)',
+      'Totalmente modular con cables planos negros de fácil ordenamiento'
+    ],
+    compatibilidad: {
+      tdp: 750,
+      formFactor: 'ATX'
+    },
+    origen: 'CATALOGO',
+    estado: 'DISPONIBLE',
+    enlaceOficial: 'https://latam.msi.com/Power-Supply/MAG-A750GL-PCIE5',
+    observaciones: 'Stock disponible en taller. Ideal para GPUs modernas con picos transitorios.'
+  },
+  {
     id: 'psu-corsair-rm850e-gold',
     categoria: 'psu',
     marca: 'Corsair',
@@ -460,7 +511,8 @@ export const CATALOG_PRODUCTS: Product[] = [
       'Modo Zero RPM silencioso en cargas medias y bajas'
     ],
     compatibilidad: {
-      tdp: 850
+      tdp: 850,
+      formFactor: 'ATX'
     },
     origen: 'CATALOGO',
     estado: 'DISPONIBLE',
@@ -909,6 +961,106 @@ export const CATALOG_PRODUCTS: Product[] = [
     estado: 'A_CONSEGUIR',
     enlaceOficial: 'https://pcpartpicker.com/product/YRJp99/corsair-rm750e-2023-750-w-80-gold-certified-fully-modular-atx-power-supply-cp-9020262-na',
     observaciones: '⭐ Recomendación Gamer: La fuente de poder más sugerida para alimentar GPUs RTX 4070 / RX 7800 XT con seguridad total.'
+  },
+  {
+    id: 'psu-evga-750-bp-bronze',
+    categoria: 'psu',
+    marca: 'EVGA',
+    modelo: '750 BP 750W 80+ Bronze',
+    nombre: 'EVGA 750 BP 750W 80+ Bronze',
+    precio: 79,
+    moneda: 'USD',
+    imagen: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=800&q=80',
+    stock: 0,
+    especificaciones: [
+      '750W continuos con certificación 80 PLUS Bronze (hasta 85% de eficiencia)',
+      'La opción de 750W más accesible para cuidar el presupuesto sin sacrificar potencia',
+      'Protecciones completas OVP, UVP, OCP, OPP, SCP',
+      'Ventilador silencioso de 120mm con control térmico automático'
+    ],
+    compatibilidad: {
+      tdp: 750,
+      formFactor: 'ATX'
+    },
+    origen: 'PEDIDO_ESPECIAL',
+    estado: 'A_CONSEGUIR',
+    enlaceOficial: 'https://pcpartpicker.com/product/tkjNnQ/evga-750-bp-750-w-80-bronze-certified-atx-power-supply-100-bp-0750-k1',
+    observaciones: '⭐ Recomendación Gamer: La 750W más económica para RX 7800 XT o RTX 4070 cuando el presupuesto es ajustado.'
+  },
+  {
+    id: 'psu-seasonic-focus-gx750',
+    categoria: 'psu',
+    marca: 'Seasonic',
+    modelo: 'Focus GX-750 750W 80+ Gold Full Modular',
+    nombre: 'Seasonic Focus GX-750 750W 80+ Gold Modular',
+    precio: 119,
+    moneda: 'USD',
+    imagen: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80',
+    stock: 0,
+    especificaciones: [
+      'La marca de fuentes más legendaria y respetada por técnicos e ingenieros',
+      'Certificación 80 PLUS Gold con condensadores japoneses a 105°C',
+      'Regulación de voltaje estricta (Tight Voltage Regulation < 3%)',
+      'Control de ventilador silencioso híbrido S3FC y 10 años de garantía de fábrica'
+    ],
+    compatibilidad: {
+      tdp: 750,
+      formFactor: 'ATX'
+    },
+    origen: 'PEDIDO_ESPECIAL',
+    estado: 'A_CONSEGUIR',
+    enlaceOficial: 'https://pcpartpicker.com/product/97848d/seasonic-focus-gx-750-w-80-gold-certified-fully-modular-atx-power-supply-focus-gx-750',
+    observaciones: '⭐ Recomendación Gamer: Tier A dorada. Componentes internos indestructibles para una PC que dure 10 años.'
+  },
+  {
+    id: 'psu-thermaltake-gf1-850w',
+    categoria: 'psu',
+    marca: 'Thermaltake',
+    modelo: 'Toughpower GF1 850W 80+ Gold Full Modular',
+    nombre: 'Thermaltake Toughpower GF1 850W 80+ Gold Modular',
+    precio: 115,
+    moneda: 'USD',
+    imagen: 'https://images.unsplash.com/photo-1587202372616-b43abea06c2a?auto=format&fit=crop&w=800&q=80',
+    stock: 0,
+    especificaciones: [
+      '850W continuo de potencia pura con certificación 80 PLUS Gold',
+      'Riel único de +12V y diseño LLC de alta eficiencia',
+      'Condensadores 100% japoneses de alta calidad',
+      'Ventilador Smart Zero Fan con botón trasero para modo pasivo'
+    ],
+    compatibilidad: {
+      tdp: 850,
+      formFactor: 'ATX'
+    },
+    origen: 'PEDIDO_ESPECIAL',
+    estado: 'A_CONSEGUIR',
+    enlaceOficial: 'https://pcpartpicker.com/product/P7pmP6/thermaltake-toughpower-gf1-pe-850-w-80-gold-certified-fully-modular-atx-power-supply-ps-tpd-0850fnfagu-1',
+    observaciones: '⭐ Recomendación Gamer: 850W reales de alto rendimiento a un precio muy conveniente.'
+  },
+  {
+    id: 'psu-corsair-rm1000e-gold',
+    categoria: 'psu',
+    marca: 'Corsair',
+    modelo: 'RM1000e 1000W 80+ Gold Full Modular ATX 3.0',
+    nombre: 'Corsair RM1000e 1000W 80+ Gold Modular (ATX 3.0)',
+    precio: 179,
+    moneda: 'USD',
+    imagen: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80',
+    stock: 0,
+    especificaciones: [
+      '1000W de potencia masiva continua para builds extremas y overclocking',
+      'Estándar ATX 3.0 con cable 12VHPWR para placas de video de nueva generación',
+      'Certificación Cybenetics Platinum y 80 PLUS Gold',
+      'Ventilador de 120mm con rodamiento rifle y modo de reposo silencioso'
+    ],
+    compatibilidad: {
+      tdp: 1000,
+      formFactor: 'ATX'
+    },
+    origen: 'PEDIDO_ESPECIAL',
+    estado: 'A_CONSEGUIR',
+    enlaceOficial: 'https://pcpartpicker.com/product/fxGhP6/corsair-rm1000e-2023-1000-w-80-gold-certified-fully-modular-atx-power-supply-cp-9020264-na',
+    observaciones: '⭐ Recomendación Gamer: Potencia de sobra para placas tope de gama como RX 9070 XT o setups multi-disco.'
   },
   {
     id: 'cooling-thermalright-peerless-assassin',

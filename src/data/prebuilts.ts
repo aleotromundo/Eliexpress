@@ -39,7 +39,7 @@ export const PREBUILT_PCS: PrebuiltPC[] = [
     tagline: '8 núcleos de alto rendimiento y 16GB de VRAM para jugar todo en Ultra (Piezas en Stock)',
     descripcion: 'La opción más equilibrada y recomendada del lote físico: procesador AMD Ryzen 7 5700X de 8 núcleos junto a la potente Gigabyte RX 7800 XT de 16GB. Excelente para jugar en 1440p con configuraciones gráficas en Ultra y multitarea pesada.',
     usoRecomendado: 'Gaming 1440p Ultra · Streaming Twitch/YouTube · Edición de Video Premiere/DaVinci',
-    precioEstimado: 1478,
+    precioEstimado: 1498,
     imagen: 'https://images.unsplash.com/photo-1544652478-6653e09f18a2?auto=format&fit=crop&w=800&q=80',
     fpsEstimados: [
       { juego: 'Cyberpunk 2077', resolucion: '1440p Ultra FSR', fps: 88, calidad: 'Ultra' },
@@ -50,7 +50,7 @@ export const PREBUILT_PCS: PrebuiltPC[] = [
     aspectosDestacados: [
       'Combo de hardware real del Lote 01-A listo para entrega',
       'Placa Gigabyte RX 7800 XT con 16GB VRAM (sin límites de memoria)',
-      'CPU Ryzen 7 5700X (8 núcleos / 16 hilos) de bajísimo calor',
+      'Fuente Gigabyte UD750GM 750W 80+ Gold para respaldo energético óptimo',
       '32GB RAM Samsung dual-channel + Gabinete Mesh de alto flujo'
     ],
     componentes: {
@@ -59,7 +59,7 @@ export const PREBUILT_PCS: PrebuiltPC[] = [
       ram: 'ram-samsung-32gb-ddr4',
       gpu: 'gpu-gigabyte-rx7800xt',
       storage: 'storage-kingston-nv2-1tb',
-      psu: 'psu-gigabyte-650w-bronze',
+      psu: 'psu-gigabyte-ud750gm-gold',
       case: 'case-deepcool-cc560-airflow'
     }
   },

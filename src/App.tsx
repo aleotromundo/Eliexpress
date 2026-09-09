@@ -8,6 +8,7 @@ import { ComponentSelectorModal } from './components/ComponentSelectorModal';
 import { SpecialRequestModal } from './components/SpecialRequestModal';
 import { OrderSummaryModal } from './components/OrderSummaryModal';
 import { AiAdvisorModal } from './components/AiAdvisorModal';
+import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { ActiveBuild, ComponentCategory, Product, PrebuiltPC } from './types';
 import { CATALOG_PRODUCTS } from './data/catalog';
 import { evaluateCompatibility } from './utils/compatibility';
@@ -22,7 +23,7 @@ function getInitialBuild(): ActiveBuild {
     ram: findProd('ram-samsung-32gb-ddr4'),
     gpu: findProd('gpu-gigabyte-rx7800xt'),
     storage: findProd('storage-kingston-nv2-1tb'),
-    psu: findProd('psu-gigabyte-650w-bronze'),
+    psu: findProd('psu-gigabyte-ud750gm-gold') || findProd('psu-gigabyte-650w-bronze'),
     case: findProd('case-deepcool-cc560-airflow'),
     cooling: findProd('fan-deepcool-cf120-x5'),
     monitor: null,
@@ -288,6 +289,9 @@ export default function App() {
           onClose={() => setIsAiModalOpen(false)}
         />
       )}
+
+      {/* Floating WhatsApp Button with 33s/11s oscillation and seller tooltip */}
+      <FloatingWhatsApp />
 
     </div>
   );

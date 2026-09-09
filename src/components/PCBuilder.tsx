@@ -406,13 +406,23 @@ export function PCBuilder({
                     ) : (
                       <HelpCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
                     )}
-                    <div>
+                    <div className="flex-1">
                       <strong className="block font-['JetBrains_Mono'] text-[11px] uppercase">
                         {issue.title}
                       </strong>
                       <span className="text-[11px] opacity-90 leading-tight block mt-0.5">
                         {issue.message}
                       </span>
+                      {issue.id === 'psu-power-low' && (
+                        <button
+                          type="button"
+                          onClick={() => onOpenSelector('psu', 'Fuentes de Poder (750W+)')}
+                          className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#F5C518]/15 hover:bg-[#F5C518]/25 text-[#F5C518] border border-[#F5C518]/40 font-['JetBrains_Mono'] text-[11px] font-bold transition-all cursor-pointer"
+                        >
+                          <Zap className="w-3 h-3" />
+                          <span>Ver Fuentes de 750W / 850W publicadas</span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
