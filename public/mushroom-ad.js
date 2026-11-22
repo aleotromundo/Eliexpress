@@ -19,7 +19,7 @@
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const css = `
-    #mm-hongo { position: fixed; left: 14px; bottom: 10px; width: 64px; height: 72px; z-index: 9998; cursor: pointer; border: 0; padding: 0; background: none; -webkit-tap-highlight-color: transparent; }
+    #mm-hongo { position: fixed; left: 14px; bottom: 10px; width: 22px; height: 24px; z-index: 9998; cursor: pointer; border: 0; padding: 0; background: none; -webkit-tap-highlight-color: transparent; }
     #mm-hongo svg { width: 100%; height: 100%; overflow: visible; transition: transform .4s ease; }
     #mm-hongo .mm-cap { transform-origin: 50% 100%; animation: mmBreathe 4.5s ease-in-out infinite; }
     #mm-hongo .mm-glow { animation: mmGlow 3.2s ease-in-out infinite; }
